@@ -1,4 +1,4 @@
-MakamToolBox
+MakamBox
 ============
 This is an open-source Turkish Makam Music Signal Processing Project. 
 It contains some codes, implementations and algorithms which are developed by independent coders. 
@@ -12,7 +12,7 @@ tools that can work real-time and provide a visual feedback to the user for comp
 reference recording.
 
 
-It's still being designed,implemented and developed by Bilge Mirac ATICI; supervised by Baris BOZKURT for M,Sc. thesis on Bahcesehir University,Turkey.
+It's designed,implemented and developed by Bilge Mirac ATICI; supervised by Baris BOZKURT for M,Sc. thesis on Bahcesehir University,Turkey.
 
 	MakamBox is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,4 +27,8 @@ It's still being designed,implemented and developed by Bilge Mirac ATICI; superv
 	You should have received a copy of the GNU General Public License
     along with MakamBox.  If not, see <http://www.gnu.org/licenses/>.
  
+ 
+ Dependencies
+============ 
+ All dependencies are located in "lib" folder. You have to rebuild project classpath (In Eclipse, Java Build Path/ Add External Libraries)
 

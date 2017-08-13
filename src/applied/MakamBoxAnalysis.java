@@ -71,7 +71,7 @@ import utilities.Plot;
 public class MakamBoxAnalysis {
 	public static ResourceBundle LANG = ResourceBundle.getBundle("applied.language_en"); //$NON-NLS-1$
 
-	public static JSlider positionSlide,volumeSlide;
+	public static JSlider volumeSlide, positionSlide;
 	public static JProgressBar progressBar;
 	protected JFrame frmMakambox;
 	private JComboBox<String> ahenkList;
@@ -79,13 +79,13 @@ public class MakamBoxAnalysis {
 	private JMenuItem mntmSelectFile,mntmTuning,btnShowHistogram,
 	btnShowSongWith,btnShowIntervals,btnShowRecordWithtemplate,
 	btnSongRecordTemp,btnShowTuningChart,btnShowHistogramWith,
-	btnShowRecordHistogram,btnShowSetting, btnShowRecordPT,btnShowSongPT;
+	btnShowRecordHistogram,btnShowSetting, btnShowRecordPT,btnShowSongPT, mntmSelectData;
 	private JMenuBar menuBar;
 	private JMenu mnShowHistogram,mnCulturespecificSettings;
 	private JPanel pitchComp,waveComp;
-	private JLabel lblVolume,lblPosition,lblRecordStatus,
+	private JLabel lblVolume,lblRecordStatus,lblStatusLabel,
 		lblSaveStatus,lblShiftLabel,tonicNote,
-		makamPane,tonicHz,shiftAmount,lblStatusLabel,lblMakamName,
+		makamPane,tonicHz,shiftAmount,lblMakamName,
 		lblTonicNote,lblTonicFrequency,lblNewLabel;
 	private JButton btnPlay,btnStop,btnStartRecording,
 		btnStopRecording,btnDetectMakam,btnPlayRecord,btnStopRecord,
@@ -104,6 +104,7 @@ public class MakamBoxAnalysis {
 	private JComboBox<String> makamList;
 	private JButton btnSet;
 	private JButton btnAnalyze;
+	private JMenu mnSelect;
 
 	/**
 	 * Launch the application.
@@ -136,7 +137,7 @@ public class MakamBoxAnalysis {
 		format = new AudioFormat(44100f,16,1,true,false);
 		
 		frmMakambox = new JFrame();
-		frmMakambox.setMinimumSize(new Dimension(1050, 580));
+		frmMakambox.setMinimumSize(new Dimension(1050, 610));
 		frmMakambox.setTitle(LANG.getString("MakamBoxAnalysis.frmMakambox.title")); //$NON-NLS-1$
 		frmMakambox.setResizable(false);
 		frmMakambox.setLocation(new Point(150, 150));
@@ -149,7 +150,7 @@ public class MakamBoxAnalysis {
 		waveComp = new JPanel();
 		waveComp.setLayout(new SpringLayout());
 		waveComp.setForeground(Color.BLACK);
-		waveComp.setLocation(6, 6);
+		waveComp.setLocation(6, 21);
 		waveComp.setBackground(Color.LIGHT_GRAY);
 		waveComp.setSize(new Dimension(713, 230));
 		waveComp.setMinimumSize(new Dimension(713, 230));
@@ -158,7 +159,7 @@ public class MakamBoxAnalysis {
 		
 		pitchComp = new JPanel();
 		pitchComp.setLayout(new BorderLayout(0, 0));
-		pitchComp.setLocation(6, 292);
+		pitchComp.setLocation(6, 322);
 		pitchComp.setMinimumSize(new Dimension(713, 230));
 		pitchComp.setBackground(Color.BLACK);
 		pitchComp.setSize(new Dimension(713, 230));
@@ -168,7 +169,7 @@ public class MakamBoxAnalysis {
 		btnPlay = new JButton(LANG.getString("MakamBoxAnalysis.btnPlay.text")); //$NON-NLS-1$
 		btnPlay.setFont(btnFont);
 		btnPlay.setEnabled(false);
-		btnPlay.setBounds(734, 20, 71, 25);
+		btnPlay.setBounds(734, 32, 71, 25);
 		btnPlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -187,7 +188,7 @@ public class MakamBoxAnalysis {
 		btnPause = new JButton(LANG.getString("MakamBoxAnalysis.btnPause.text")); //$NON-NLS-1$
 		btnPause.setFont(btnFont);
 		btnPause.setEnabled(false);
-		btnPause.setBounds(734, 57, 71, 25);
+		btnPause.setBounds(734, 69, 71, 25);
 		btnPause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -206,7 +207,7 @@ public class MakamBoxAnalysis {
 		btnStop = new JButton(LANG.getString("MakamBoxAnalysis.btnStop.text")); //$NON-NLS-1$
 		btnStop.setFont(btnFont);
 		btnStop.setEnabled(false);
-		btnStop.setBounds(734, 94, 71, 25);
+		btnStop.setBounds(734, 106, 71, 25);
 		btnStop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -225,7 +226,7 @@ public class MakamBoxAnalysis {
 		
 		btnDetectMakam = new JButton(LANG.getString("MakamBoxAnalysis.btnDetectMakam.text")); //$NON-NLS-1$
 		btnDetectMakam.setFont(btnFont);
-		btnDetectMakam.setBounds(808, 55, 107, 25);
+		btnDetectMakam.setBounds(808, 67, 107, 25);
 		btnDetectMakam.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -251,7 +252,7 @@ public class MakamBoxAnalysis {
 
 		makamPane = new JLabel(LANG.getString("MakamBoxAnalysis.makamPane.text")); //$NON-NLS-1$
 		makamPane.setOpaque(true);
-		makamPane.setBounds(926, 83, 97, 16);
+		makamPane.setBounds(926, 95, 97, 16);
 		makamPane.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		makamPane.setForeground(Color.BLACK);
 		makamPane.setBackground(Color.WHITE);
@@ -261,7 +262,7 @@ public class MakamBoxAnalysis {
 		
 		btnStartRecording = new JButton(LANG.getString("MakamBoxAnalysis.btnStartRecording.text")); //$NON-NLS-1$
 		btnStartRecording.setFont(btnFont);
-		btnStartRecording.setBounds(750, 394, 107, 23);
+		btnStartRecording.setBounds(742, 418, 107, 23);
 		btnStartRecording.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -278,7 +279,7 @@ public class MakamBoxAnalysis {
 		btnStopRecording = new JButton(LANG.getString("MakamBoxAnalysis.btnStopRecording.text")); //$NON-NLS-1$
 		btnStopRecording.setFont(btnFont);
 		btnStopRecording.setEnabled(false);
-		btnStopRecording.setBounds(750, 429, 107, 29);
+		btnStopRecording.setBounds(742, 453, 107, 29);
 		btnStopRecording.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -302,7 +303,7 @@ public class MakamBoxAnalysis {
 		btnPlayRecord = new JButton(LANG.getString("MakamBoxAnalysis.btnPlayRecord.text")); //$NON-NLS-1$
 		btnPlayRecord.setFont(btnFont);
 		btnPlayRecord.setEnabled(false);
-		btnPlayRecord.setBounds(860, 394, 107, 25);
+		btnPlayRecord.setBounds(852, 418, 107, 25);
 		btnPlayRecord.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -322,7 +323,7 @@ public class MakamBoxAnalysis {
 		btnStopRecord = new JButton(LANG.getString("MakamBoxAnalysis.btnStopRecord.text")); //$NON-NLS-1$
 		btnStopRecord.setFont(btnFont);
 		btnStopRecord.setEnabled(false);
-		btnStopRecord.setBounds(859, 429, 107, 29);
+		btnStopRecord.setBounds(851, 453, 107, 29);
 		btnStopRecord.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -337,21 +338,12 @@ public class MakamBoxAnalysis {
 				}
 			}
 		});
-		frmMakambox.getContentPane().add(btnStopRecord);	
-		
-		positionSlide = new JSlider();
-		positionSlide.setValue(0);	
-		positionSlide.setBounds(59, 270, 631, 16);
-		
-		lblPosition = new JLabel(LANG.getString("MakamBoxAnalysis.lblPosition.text")); //$NON-NLS-1$
-		lblPosition.setBounds(16, 235, 57, 29);
-		lblPosition.setForeground(Color.WHITE);
-		lblPosition.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		frmMakambox.getContentPane().add(btnStopRecord);
 		
 		btnPlaySynth = new JButton(LANG.getString("MakamBoxAnalysis.btnPlaySynth.text")); //$NON-NLS-1$
 		btnPlaySynth.setFont(btnFont);
 		btnPlaySynth.setEnabled(false);
-		btnPlaySynth.setBounds(843, 350, 90, 25);
+		btnPlaySynth.setBounds(835, 359, 90, 25);
 		btnPlaySynth.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -370,7 +362,7 @@ public class MakamBoxAnalysis {
 		btnStopSynth = new JButton(LANG.getString("MakamBoxAnalysis.btnStopSynth.text")); //$NON-NLS-1$
 		btnStopSynth.setFont(btnFont);
 		btnStopSynth.setEnabled(false);
-		btnStopSynth.setBounds(933, 350, 105, 25);
+		btnStopSynth.setBounds(925, 359, 105, 25);
 		btnStopSynth.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -388,12 +380,12 @@ public class MakamBoxAnalysis {
 		lblRecordStatus = new JLabel(LANG.getString("MakamBoxAnalysis.lblRecordStatus.text")); //$NON-NLS-1$
 		lblRecordStatus.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		lblRecordStatus.setForeground(Color.WHITE);
-		lblRecordStatus.setBounds(905, 462, 140, 26);
+		lblRecordStatus.setBounds(897, 486, 140, 26);
 		
 		btnSineSynth = new JButton(LANG.getString("MakamBoxAnalysis.btnSineSynth.text")); //$NON-NLS-1$
 		btnSineSynth.setFont(btnFont);
 		btnSineSynth.setEnabled(false);
-		btnSineSynth.setBounds(750, 350, 94, 25);
+		btnSineSynth.setBounds(742, 359, 94, 25);
 		btnSineSynth.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -413,7 +405,7 @@ public class MakamBoxAnalysis {
 		btnSaveRecord = new JButton(LANG.getString("MakamBoxAnalysis.btnSaveRecord.text")); //$NON-NLS-1$
 		btnSaveRecord.setFont(btnFont);
 		btnSaveRecord.setEnabled(false);
-		btnSaveRecord.setBounds(750, 459, 107, 29);
+		btnSaveRecord.setBounds(742, 483, 107, 29);
 		btnSaveRecord.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -431,25 +423,7 @@ public class MakamBoxAnalysis {
 		frmMakambox.getContentPane().add(btnSaveRecord);
 		
 		lblSaveStatus = new JLabel(LANG.getString("MakamBoxAnalysis.lblSaveStatus.text")); //$NON-NLS-1$
-		lblSaveStatus.setBounds(823, 491, 144, 19);
-		
-		lblStatusLabel = new JLabel(LANG.getString("MakamBoxAnalysis.lblStatusLabel.text")); //$NON-NLS-1$
-		lblStatusLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		lblStatusLabel.setForeground(Color.WHITE);
-		lblStatusLabel.setBackground(Color.LIGHT_GRAY);
-		lblStatusLabel.setBounds(612, 236, 107, 26);
-	
-		mntmSelectFile = new JMenuItem(LANG.getString("MakamBoxAnalysis.mntmSelectFile.text")); //$NON-NLS-1$
-		mntmSelectFile.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		mntmSelectFile.setMaximumSize(new Dimension(85, 19));
-		mntmSelectFile.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lblStatusLabel.setForeground(Color.RED);
-				lblStatusLabel.setText("!!! Please Wait !!!");
-				selectFile();
-			}
-		});
+		lblSaveStatus.setBounds(815, 515, 144, 19);
 		
 		btnShowHistogram = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowHistogram.text")); //$NON-NLS-1$
 		btnShowHistogram.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
@@ -545,10 +519,38 @@ public class MakamBoxAnalysis {
 		menuBar = new JMenuBar();
 		mnShowHistogram = new JMenu(LANG.getString("MakamBoxAnalysis.mnShowHistogram.text")); //$NON-NLS-1$
 		mnShowHistogram.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		
+		btnShowSongPT = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowSongPT.text")); //$NON-NLS-1$
+		btnShowSongPT.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		btnShowSongPT.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					box.getPitchChart().createDialog();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,"Pitch chart couldn't be created !!!");
+				}
+			}
+		});
+		mnShowHistogram.add(btnShowSongPT);
 		mnShowHistogram.add(btnShowHistogram);
 		mnShowHistogram.add(btnShowHistogramWith);
 		mnShowHistogram.add(btnShowIntervals);
 		mnShowHistogram.add(btnShowTuningChart);
+		
+		btnShowRecordPT = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowRecordPT.text")); //$NON-NLS-1$
+		btnShowRecordPT.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		btnShowRecordPT.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Plot.plot(recBox.getPitchTrackData());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,"Please make a record");
+				}
+			}			
+		});
+		mnShowHistogram.add(btnShowRecordPT);
 		mnShowHistogram.add(btnShowRecordHistogram);
 		
 		btnShowRecordWithtemplate = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowRecordWithtemplate.text")); //$NON-NLS-1$
@@ -589,36 +591,35 @@ public class MakamBoxAnalysis {
 		lblVolume.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		lblVolume.setForeground(Color.BLACK);
 		lblVolume.setBackground(Color.WHITE);
-		menuBar.add(mntmSelectFile);
-		menuBar.add(mnShowHistogram);
 		
-		btnShowRecordPT = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowRecordPT.text")); //$NON-NLS-1$
-		btnShowRecordPT.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		btnShowRecordPT.addActionListener(new ActionListener(){
+		mnSelect = new JMenu(LANG.getString("MakamBoxAnalysis.mnSelect.text")); //$NON-NLS-1$
+		mnSelect.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		menuBar.add(mnSelect);
+		
+		mntmSelectFile = new JMenuItem(LANG.getString("MakamBoxAnalysis.mntmSelectFile.text")); //$NON-NLS-1$
+		mntmSelectFile.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		mntmSelectFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Plot.plot(recBox.getPitchTrackData());
-				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null,"Please make a record");
-				}
-			}			
-		});
-		mnShowHistogram.add(btnShowRecordPT);
-		
-		btnShowSongPT = new JMenuItem(LANG.getString("MakamBoxAnalysis.btnShowSongPT.text")); //$NON-NLS-1$
-		btnShowSongPT.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		btnShowSongPT.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Plot.plot(box.getPitchTrackData());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				lblStatusLabel.setForeground(Color.RED);
+				lblStatusLabel.setText("!!! Please Wait !!!");
+				selectFile();
 			}
 		});
-		mnShowHistogram.add(btnShowSongPT);
+		mnSelect.add(mntmSelectFile);
+		
+		mntmSelectData= new JMenuItem(LANG.getString("MakamBoxAnalysis.mntmLoadPitchtrackData.text")); //$NON-NLS-1$
+		mntmSelectData.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		mnSelect.add(mntmSelectData);
+		mntmSelectData.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblStatusLabel.setForeground(Color.RED);
+				lblStatusLabel.setText("!!! Please Wait !!!");
+				JOptionPane.showMessageDialog(null,"This function is not ready");
+			}
+		});
+		menuBar.add(mnShowHistogram);
 		
 		mntmTuning = new JMenuItem(LANG.getString("MakamBoxAnalysis.mntmTuning.text")); //$NON-NLS-1$
 		mntmTuning.addActionListener(new ActionListener() {
@@ -731,34 +732,30 @@ public class MakamBoxAnalysis {
 			}
 		});
 		menuBar.add(mntmExit);
-				
-		frmMakambox.getContentPane().add(lblStatusLabel);
 		frmMakambox.getContentPane().add(lblSaveStatus);
 		frmMakambox.getContentPane().add(lblRecordStatus);
-		frmMakambox.getContentPane().add(lblPosition);
 		frmMakambox.getContentPane().add(makamPane);
-		frmMakambox.getContentPane().add(positionSlide);
 		
 		tonicNote = new JLabel(LANG.getString("MakamBoxAnalysis.tonicNote.text")); //$NON-NLS-1$
 		tonicNote.setHorizontalTextPosition(SwingConstants.LEFT);
 		tonicNote.setOpaque(true);
 		tonicNote.setBackground(Color.WHITE);
 		tonicNote.setForeground(Color.BLACK);
-		tonicNote.setBounds(950, 108, 73, 16);
+		tonicNote.setBounds(950, 120, 73, 16);
 		frmMakambox.getContentPane().add(tonicNote);
 		
 		tonicHz = new JLabel(LANG.getString("MakamBoxAnalysis.tonicHz.text")); //$NON-NLS-1$
 		tonicHz.setOpaque(true);
 		tonicHz.setForeground(Color.BLACK);
 		tonicHz.setBackground(Color.WHITE);
-		tonicHz.setBounds(950, 133, 73, 16);
+		tonicHz.setBounds(950, 145, 73, 16);
 		frmMakambox.getContentPane().add(tonicHz);
 		
 		shiftAmount = new JLabel(LANG.getString("MakamBoxAnalysis.shiftAmount.text")); //$NON-NLS-1$
 		shiftAmount.setOpaque(true);
 		shiftAmount.setBackground(Color.WHITE);
 		shiftAmount.setForeground(Color.BLACK);
-		shiftAmount.setBounds(872, 203, 91, 16);
+		shiftAmount.setBounds(864, 219, 91, 16);
 		frmMakambox.getContentPane().add(shiftAmount);
 		
 		lblShiftLabel = new JLabel(LANG.getString("MakamBoxAnalysis.lblShiftLabel.text")); //$NON-NLS-1$
@@ -766,7 +763,7 @@ public class MakamBoxAnalysis {
 		lblShiftLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblShiftLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblShiftLabel.setForeground(Color.WHITE);
-		lblShiftLabel.setBounds(856, 162, 126, 36);
+		lblShiftLabel.setBounds(855, 178, 126, 36);
 		frmMakambox.getContentPane().add(lblShiftLabel);
 		
 		btnPitchShift = new JButton(LANG.getString("MakamBoxAnalysis.btnPitchShift.text")); //$NON-NLS-1$
@@ -788,7 +785,7 @@ public class MakamBoxAnalysis {
 			}
 		});
 		btnPitchShift.setFont(btnFont);
-		btnPitchShift.setBounds(750, 238, 87, 29);
+		btnPitchShift.setBounds(742, 254, 87, 29);
 		frmMakambox.getContentPane().add(btnPitchShift);
 		
 		ahenkList = new JComboBox<String>();
@@ -800,7 +797,7 @@ public class MakamBoxAnalysis {
 			}
 		});
 		ahenkList.setSize(new Dimension(95, 25));
-		ahenkList.setBounds(750, 203, 110, 23);
+		ahenkList.setBounds(742, 219, 110, 23);
 		if(SelectCulture.getCulture()!=null){
 			setAhenkList(SelectCulture.getCulture().getAhenksData());
 		}		
@@ -809,7 +806,7 @@ public class MakamBoxAnalysis {
 		btnShiftPlay = new JButton(LANG.getString("MakamBoxAnalysis.btnShiftPlay.text")); //$NON-NLS-1$
 		btnShiftPlay.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		btnShiftPlay.setEnabled(false);
-		btnShiftPlay.setBounds(842, 242, 55, 25);
+		btnShiftPlay.setBounds(834, 258, 55, 25);
 		btnShiftPlay.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -829,7 +826,7 @@ public class MakamBoxAnalysis {
 		btnShiftPause = new JButton(LANG.getString("MakamBoxAnalysis.btnShiftPause.text")); //$NON-NLS-1$
 		btnShiftPause.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		btnShiftPause.setEnabled(false);
-		btnShiftPause.setBounds(893, 242, 71, 25);
+		btnShiftPause.setBounds(885, 258, 71, 25);
 		btnShiftPause.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -849,7 +846,7 @@ public class MakamBoxAnalysis {
 		btnShiftStop = new JButton(LANG.getString("MakamBoxAnalysis.btnShiftStop.text")); //$NON-NLS-1$
 		btnShiftStop.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		btnShiftStop.setEnabled(false);
-		btnShiftStop.setBounds(958, 242, 68, 25);
+		btnShiftStop.setBounds(950, 258, 68, 25);
 		btnShiftStop.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -869,7 +866,7 @@ public class MakamBoxAnalysis {
 		btnShiftSave = new JButton(LANG.getString("MakamBoxAnalysis.btnShiftSave.text")); //$NON-NLS-1$
 		btnShiftSave.setFont(btnFont);
 		btnShiftSave.setEnabled(false);
-		btnShiftSave.setBounds(750, 295, 88, 29);
+		btnShiftSave.setBounds(742, 311, 88, 29);
 		btnShiftSave.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -885,26 +882,26 @@ public class MakamBoxAnalysis {
 		
 		lblMakamName = new JLabel(LANG.getString("MakamBoxAnalysis.lblMakamName.text")); //$NON-NLS-1$
 		lblMakamName.setForeground(Color.WHITE);
-		lblMakamName.setBounds(816, 83, 90, 16);
+		lblMakamName.setBounds(816, 95, 90, 16);
 		frmMakambox.getContentPane().add(lblMakamName);
 		
 		lblTonicNote = new JLabel(LANG.getString("MakamBoxAnalysis.lblTonicNote.text")); //$NON-NLS-1$
 		lblTonicNote.setForeground(Color.WHITE);
-		lblTonicNote.setBounds(816, 108, 81, 16);
+		lblTonicNote.setBounds(816, 120, 81, 16);
 		frmMakambox.getContentPane().add(lblTonicNote);
 		
 		lblTonicFrequency = new JLabel(LANG.getString("MakamBoxAnalysis.lblTonicFrequency.text")); //$NON-NLS-1$
 		lblTonicFrequency.setForeground(Color.WHITE);
-		lblTonicFrequency.setBounds(816, 134, 110, 16);
+		lblTonicFrequency.setBounds(816, 146, 110, 16);
 		frmMakambox.getContentPane().add(lblTonicFrequency);
 		
 		lblNewLabel = new JLabel(LANG.getString("MakamBoxAnalysis.lblNewLabel.text")); //$NON-NLS-1$
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBounds(750, 175, 89, 16);
+		lblNewLabel.setBounds(749, 191, 89, 16);
 		frmMakambox.getContentPane().add(lblNewLabel);
 		
 		progressBar = new JProgressBar();
-		progressBar.setBounds(852, 279, 150, 20);
+		progressBar.setBounds(844, 295, 150, 20);
 		progressBar.setMinimum(0);
 		progressBar.addChangeListener(new ChangeListener(){
 			@Override
@@ -933,14 +930,14 @@ public class MakamBoxAnalysis {
 		});
 		btnShiftCancel.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		btnShiftCancel.setEnabled(false);
-		btnShiftCancel.setBounds(750, 267, 80, 29);
+		btnShiftCancel.setBounds(742, 283, 80, 29);
 		frmMakambox.getContentPane().add(btnShiftCancel);
 		
 		shiftAmountCent = new JLabel(LANG.getString("MakamBoxAnalysis.shiftAmountCent.text")); //$NON-NLS-1$
 		shiftAmountCent.setOpaque(true);
 		shiftAmountCent.setForeground(Color.BLACK);
 		shiftAmountCent.setBackground(Color.WHITE);
-		shiftAmountCent.setBounds(976, 203, 68, 16);
+		shiftAmountCent.setBounds(968, 219, 68, 16);
 		frmMakambox.getContentPane().add(shiftAmountCent);
 		
 		JLabel lblCent = new JLabel(LANG.getString("MakamBoxAnalysis.lblCent.text")); //$NON-NLS-1$
@@ -948,7 +945,7 @@ public class MakamBoxAnalysis {
 		lblCent.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCent.setForeground(Color.WHITE);
 		lblCent.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		lblCent.setBounds(985, 165, 46, 36);
+		lblCent.setBounds(984, 181, 46, 36);
 		frmMakambox.getContentPane().add(lblCent);
 		
 		makamList = new JComboBox<String>();
@@ -974,7 +971,7 @@ public class MakamBoxAnalysis {
 		
 		JLabel makamUser = new JLabel(LANG.getString("MakamBoxAnalysis.makamUser.text")); //$NON-NLS-1$
 		makamUser.setForeground(Color.WHITE);
-		makamUser.setBounds(815, 14, 97, 31);
+		makamUser.setBounds(815, 26, 97, 31);
 		frmMakambox.getContentPane().add(makamUser);
 		
 		btnSet = new JButton(LANG.getString("MakamBoxAnalysis.btnSet.text")); //$NON-NLS-1$
@@ -1001,7 +998,7 @@ public class MakamBoxAnalysis {
 			}
 		});
 		btnSet.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-		btnSet.setBounds(956, 46, 61, 25);
+		btnSet.setBounds(956, 58, 61, 25);
 		btnSet.setEnabled(false);
 		frmMakambox.getContentPane().add(btnSet);
 		
@@ -1019,8 +1016,26 @@ public class MakamBoxAnalysis {
 				}
 			}
 		});
-		btnAnalyze.setBounds(962, 392, 85, 29);
+		btnAnalyze.setBounds(959, 418, 85, 25);
 		frmMakambox.getContentPane().add(btnAnalyze);
+		
+		JLabel label = new JLabel("Position");
+		label.setForeground(Color.WHITE);
+		label.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		label.setBounds(6, 263, 57, 29);
+		frmMakambox.getContentPane().add(label);
+		
+		positionSlide = new JSlider();
+		positionSlide.setValue(0);
+		positionSlide.setBounds(68, 292, 631, 16);
+		frmMakambox.getContentPane().add(positionSlide);
+		
+		lblStatusLabel = new JLabel("Status");
+		lblStatusLabel.setForeground(Color.WHITE);
+		lblStatusLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		lblStatusLabel.setBackground(Color.LIGHT_GRAY);
+		lblStatusLabel.setBounds(602, 264, 107, 26);
+		frmMakambox.getContentPane().add(lblStatusLabel);
 	}
 	public void setMakamList(TreeMap<String,Makam> makams){
 		if(!(makams==null)){
