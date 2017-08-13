@@ -55,7 +55,7 @@ public class SelectCulture {
 		} else {			
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);			
 		}
-		chooser.setCurrentDirectory(new File("/Users/mirac/Desktop/app/Culture Settings"));
+		chooser.setCurrentDirectory(new File("/mnt/Private/Ney/makam-analisis/workspace/MakamBox/settings"));
 		
 		int x=chooser.showOpenDialog(null);
 		if(x==JFileChooser.APPROVE_OPTION){
